@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Практика лексики: Жалобы на услуги</title>
+<style>
+    :root {
+        --bg-color: #f4f7f6;
+        --text-color: #333;
+        --card-bg: #ffffff;
+        --primary: #0d6efd;
+        --success: #198754;
+        --error: #dc3545;
+        --warning: #ffc107;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 20px;
+        line-height: 1.6;
+        font-size: 18px; /* Крупный шрифт для удобства */
+    }
+
+    .container {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #6c757d;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+
+    .exercise-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border-left: 6px solid #ccc;
+    }
+
+    /* Цветовая кодировка упражнений */
+    #ex1 { border-left-color: #28a745; } /* Зеленый */
+    #ex2 { border-left-color: #ffc107; } /* Желтый */
+    #ex3 { border-left-color: #fd7e14; } /* Оранжевый */
+    #ex4 { border-left-color: #dc3545; } /* Красный */
+    #ex5 { border-left-color: #6f42c1; } /* Фиолетовый */
+    #ex6 { border-left-color: #0d6efd; } /* Синий */
+
+    h2 {
+        font-size: 1.3rem;
+        margin-top: 0;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .instruction {
+        font-size: 1rem;
+        color: #6c757d;
+        margin-bottom: 20px;
+        font-weight: normal;
+    }
+
+    /* Элементы форм */
+    input[type="text"], select {
+        font-size: 1rem;
+        padding: 10px 15px;
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.3s, background-color 0.3s;
+        font-family: inherit;
+    }
+
+    input[type="text"]:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px top 50%;
+        background-size: 12px auto;
+        padding-right: 40px;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .input-group label {
+        min-width: 30px;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+
+    .input-group input {
+        flex: 1;
+    }
+
+    .match-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .match-item .text {
+        flex: 1;
+    }
+
+    .match-item select {
+        width: 80px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .definitions-list {
+        background: #e9ecef;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+
+    .definitions-list li {
+        margin-bottom: 8px;
+    }
+
+    /* Кнопки */
+    .btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.1s;
+        display: inline-block;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background-color: #0b5ed7;
+    }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    /* Обратная связь */
+    .correct {
+        border-color: var(--success) !important;
+        background-color: #d4edda !important;
+        color: var(--success) !important;
+        font-weight: bold;
+    }
+
+    .incorrect {
+        border-color: var(--error) !important;
+        background-color: #f8d7da !important;
+        color: var(--error) !important;
+    }
+
+    /* Коллокации (Упр 2) */
+    .colloc-option {
+        display: inline-block;
+        margin-right: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        padding: 6px 14px;
+        border: 2px solid #ced4da;
+        border-radius: 20px;
+        transition: all 0.2s;
+        user-select: none;
+        background-color: white;
+    }
+    
+    .colloc-option:hover {
+        background-color: #f1f3f5;
+    }
+
+    /* Выбранный ответ (желтый) */
+    .colloc-option.selected {
+        background-color: var(--warning);
+        color: #333;
+        border-color: var(--warning);
+        font-weight: bold;
+    }
+
+    /* Правильный (зеленый) */
+    .colloc-option.correct {
+        background-color: var(--success) !important;
+        color: white !important;
+        border-color: var(--success) !important;
+    }
+
+    /* Неправильный (красный) */
+    .colloc-option.incorrect {
+        background-color: var(--error) !important;
+        color: white !important;
+        border-color: var(--error) !important;
+    }
+
+    /* Блок с ответами */
+    .answer-box {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #e9ecef;
+        border-left: 4px solid var(--primary);
+        border-radius: 4px;
+        font-size: 0.95rem;
+    }
+
+    .answer-box strong {
+        color: var(--primary);
+    }
+
+    textarea {
+        width: 100%;
+        padding: 15px;
+        font-size: 1rem;
+        font-family: inherit;
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+        resize: vertical;
+        min-height: 60px;
+        box-sizing: border-box;
+        transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .example-box {
+        background-color: #d1e7dd;
+        color: #0f5132;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #198754;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Жалобы на услуги и Causative</h1>
+    <p class="subtitle">Практика лексики для продвинутого уровня</p>
+
+    <!-- ЗАДАНИЕ 1 -->
+    <div class="exercise-card" id="ex1">
+        <h2>🟢 Задание 1: Уровень Recognition (Соедини слово с определением)</h2>
+        <p class="instruction">Сопоставьте слово/фразу с правильным определением. Выберите букву (A-G) из выпадающего списка.</p>
+        
+        <div class="definitions-list">
+            <b>Определения:</b>
+            <ul style="margin-top: 10px; margin-bottom: 0; padding-left: 20px;">
+                <li><b>A.</b> The quality of the work done by a professional; how well they did the job.</li>
+                <li><b>B.</b> To officially use your legal power as a consumer.</li>
+                <li><b>C.</b> The legal standard: doing a job without causing damage or making careless mistakes.</li>
+                <li><b>D.</b> Getting only a portion of your money back because the service was not fully delivered or was of poor quality.</li>
+                <li><b>E.</b> Breaking the legal agreement (e.g., not doing what was promised in the contract).</li>
+                <li><b>F.</b> A company or person hired by the main shop to do the work (often used as an excuse to avoid responsibility).</li>
+                <li><b>G.</b> To fix the mistake or do the job again properly.</li>
+            </ul>
+        </div>
+
+        <div class="match-item">
+            <div class="text"><b>1.</b> Reasonable care and skill</div>
+            <select class="ex1-select" data-answer="C"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>2.</b> Workmanship</div>
+            <select class="ex1-select" data-answer="A"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>3.</b> Breach of contract</div>
+            <select class="ex1-select" data-answer="E"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>4.</b> To re-do</div>
+            <select class="ex1-select" data-answer="G"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>5.</b> Third-party / Subcontractor</div>
+            <select class="ex1-select" data-answer="F"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>6.</b> Partial refund</div>
+            <select class="ex1-select" data-answer="D"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        <div class="match-item">
+            <div class="text"><b>7.</b> To exercise my right</div>
+            <select class="ex1-select" data-answer="B"><option value="">?</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option></select>
+        </div>
+        
+        <button class="btn" onclick="checkExercise1()">Проверить ответы</button>
+    </div>
+
+    <!-- ЗАДАНИЕ 2 -->
+    <div class="exercise-card" id="ex2">
+        <h2>🟡 Задание 2: Уровень Collocations (Выбор правильного слова)</h2>
+        <p class="instruction">Выберите наиболее естественное слово для завершения фразы. При выборе слово становится желтым, затем нажмите «Проверить ответы».</p>
+        
+        <div style="margin-bottom: 20px;">
+            <p>1. To <span class="colloc-option" data-correct="exercise">do</span><span class="colloc-option" data-correct="exercise">make</span><span class="colloc-option" data-correct="exercise">exercise</span> my right.</p>
+            <p>2. A <span class="colloc-option" data-correct="partial">partial</span><span class="colloc-option" data-correct="partial">partly</span><span class="colloc-option" data-correct="partial">part</span> refund.</p>
+            <p>3. <span class="colloc-option" data-correct="third-party">Third-party</span><span class="colloc-option" data-correct="third-party">Third-world</span><span class="colloc-option" data-correct="third-party">Third-class</span> subcontractor.</p>
+            <p>4. <span class="colloc-option" data-correct="reasonable">Strong</span><span class="colloc-option" data-correct="reasonable">Reasonable</span><span class="colloc-option" data-correct="reasonable">Normal</span> care and skill.</p>
+            <p>5. <span class="colloc-option" data-correct="poor">Poor</span><span class="colloc-option" data-correct="poor">Low</span><span class="colloc-option" data-correct="poor">Weak</span> workmanship.</p>
+            <p>6. To <span class="colloc-option" data-correct="re-do">re-do</span><span class="colloc-option" data-correct="re-do">remake</span><span class="colloc-option" data-correct="re-do">re-doing</span> the job.</p>
+            <p>7. A <span class="colloc-option" data-correct="breach">breach</span><span class="colloc-option" data-correct="breach">break</span><span class="colloc-option" data-correct="breach">brake</span> of contract.</p>
+            <p>8. To <span class="colloc-option" data-correct="exercise">take</span><span class="colloc-option" data-correct="exercise">exercise</span><span class="colloc-option" data-correct="exercise">use</span> reasonable care.</p>
+            <p>9. To ask for a <span class="colloc-option" data-correct="partial">half</span><span class="colloc-option" data-correct="partial">partial</span><span class="colloc-option" data-correct="partial">partly</span> refund.</p>
+            <p>10. To <span class="colloc-option" data-correct="blame">hire</span><span class="colloc-option" data-correct="blame">use</span><span class="colloc-option" data-correct="blame">blame</span> a third-party contractor.</p>
+        </div>
+        <button class="btn" onclick="checkExercise2()">Проверить ответы</button>
+    </div>
+
+    <!-- ЗАДАНИЕ 3 -->
+    <div class="exercise-card" id="ex3">
+        <h2>🟠 Задание 3: Уровень Controlled Practice (Заполни пропуски)</h2>
+        <p class="instruction">Впишите правильное слово или фразу из рамки в пропуски. Возможно, вам придется изменить форму слова.</p>
+        <p style="background: #e9ecef; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; color: var(--primary);">
+            Слова для справки: reasonable care and skill | workmanship | breach of contract | to re-do | third-party | partial refund | exercise my right
+        </p>
+
+        <div class="input-group">
+            <label>1.</label>
+            <input type="text" data-answer="reasonable care and skill" placeholder="The plumber flooded my bathroom. This shows a complete lack of...">
+        </div>
+        <div class="input-group">
+            <label>2.</label>
+            <input type="text" data-answer="partial refund" placeholder="I paid for a 5-star hotel, but I was moved to a 3-star hotel. I want a...">
+        </div>
+        <div class="input-group">
+            <label>3.</label>
+            <input type="text" data-answer="third-party" placeholder="The company said they can't help me and that I have to call their... contractor.">
+        </div>
+        <div class="input-group">
+            <label>4.</label>
+            <input type="text" data-answer="exercise my right" placeholder="If you don't fix my laptop today, I will... to cancel the service and get a full refund.">
+        </div>
+        <div class="input-group">
+            <label>5.</label>
+            <input type="text" data-answer="workmanship" placeholder="The... on my new suit is terrible; the seams are already coming apart after one wear.">
+        </div>
+        <div class="input-group">
+            <label>6.</label>
+            <input type="text" data-answer="breach of contract" placeholder="I paid for express delivery (24 hours), but they delivered it in 5 days. This is a clear...">
+        </div>
+        <div class="input-group">
+            <label>7.</label>
+            <input type="text" data-answer="to re-do" placeholder="I had my car washed, but it is still dirty. I expect them... the service.">
+        </div>
+        <div class="input-group">
+            <label>8.</label>
+            <input type="text" data-answer="partial refund" placeholder="Because the cleaners skipped the kitchen, I demanded a...">
+        </div>
+        <div class="input-group">
+            <label>9.</label>
+            <input type="text" data-answer="reasonable care and skill" placeholder="A professional must always perform their duties with...">
+        </div>
+        <div class="input-group">
+            <label>10.</label>
+            <input type="text" data-answer="to re-do" placeholder="You scratched my table while you were fixing the sink. I want you... the surface.">
+        </div>
+
+        <button class="btn" onclick="checkInputs('ex3')">Проверить ответы</button>
+    </div>
+
+    <!-- ЗАДАНИЕ 4 -->
+    <div class="exercise-card" id="ex4">
+        <h2>🔴 Задание 4: Уровень Causative + Vocabulary (Интеграция грамматики)</h2>
+        <p class="instruction">Объедините два предложения в одно, используя <b>каузативную структуру (have/get something done)</b> И слово в скобках.</p>
+        
+        <div class="example-box">
+            <b>Пример:</b><br>
+            <i>Prompt:</i> Someone decorated my office. They did a terrible job. <i>(workmanship)</i><br>
+            <b>Ответ:</b> I <b>had my office decorated</b>, but the <b>workmanship</b> is terrible.
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <p><b>1.</b> Someone installed a new security system. They broke my door. <i>(reasonable care and skill)</i></p>
+            <textarea placeholder="I had my security system installed..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>2.</b> Someone cleaned my carpets. They only did half the job. <i>(partial refund)</i></p>
+            <textarea placeholder="I got my carpets cleaned..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>3.</b> Someone repaired my phone. The screen fell off the next day. <i>(to re-do)</i></p>
+            <textarea placeholder="I had my phone repaired..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>4.</b> Someone painted my house. They hired another company to do it, and that company ruined the walls. <i>(third-party)</i></p>
+            <textarea placeholder="I had my house painted..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>5.</b> Someone built a new fence. They stopped working after two days. <i>(breach of contract)</i></p>
+            <textarea placeholder="I am having a new fence built..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>6.</b> Someone tailored my dress. They made it the wrong size. <i>(exercise my right)</i></p>
+            <textarea placeholder="I had my dress tailored..."></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>7.</b> Someone fixed my boiler. They left a huge mess. <i>(workmanship)</i></p>
+            <textarea placeholder="I had my boiler fixed..."></textarea>
+        </div>
+
+        <button class="btn" onclick="toggleKey('key-ex4')">Показать примерные ответы</button>
+
+        <div class="answer-box" id="key-ex4">
+            <strong>Примерные ответы:</strong><br>
+            1. I had my security system installed, but they showed a lack of <b>reasonable care and skill</b>.<br>
+            2. I got my carpets cleaned, but I want a <b>partial refund</b> because they only did half the job.<br>
+            3. I had my phone repaired, but now I expect them <b>to re-do</b> the work.<br>
+            4. I had my house painted, but the main company used a <b>third-party</b> who ruined the walls.<br>
+            5. I am having a new fence built, but stopping after two days is a <b>breach of contract</b>.<br>
+            6. I had my dress tailored, but I will <b>exercise my right</b> to get a refund.<br>
+            7. I had my boiler fixed, but the <b>workmanship</b> was terrible.
+        </div>
+    </div>
+
+    <!-- ЗАДАНИЕ 5 -->
+    <div class="exercise-card" id="ex5">
+        <h2>🟣 Задание 5: Уровень Error Correction (Найди и исправь ошибку)</h2>
+        <p class="instruction">В каждом предложении есть одна ошибка (грамматическая или лексическая). Найдите и исправьте предложения.</p>
+
+        <div style="margin-bottom: 15px;">
+            <p><b>1.</b> I need to have my car re-do because the mechanic did a terrible workmanship.</p>
+            <textarea></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>2.</b> I got my hair cutted, but they didn't show reasonable care and skill.</p>
+            <textarea></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>3.</b> The shop broke our agreement, so I am going to do my right to exercise a partial refund.</p>
+            <textarea></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>4.</b> You need to have your roof checked by a third-party if you want to make a partial refund.</p>
+            <textarea></textarea>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <p><b>5.</b> I had my floor installed by a professional, but now I want them to re-did it because of the poor workmanship.</p>
+            <textarea></textarea>
+        </div>
+
+        <button class="btn" onclick="toggleKey('key-ex5')">Показать правильные ответы</button>
+
+        <div class="answer-box" id="key-ex5">
+            <strong>Правильные ответы:</strong><br>
+            1. <b>re-done</b> (have my car re-done) / <b>the workmanship was terrible</b> (или: did a terrible job).<br>
+            2. <b>cut</b> (got my hair cut).<br>
+            3. <b>exercise my right</b> to <b>ask for</b> a partial refund.<br>
+            4. You <b>make a claim</b> / You don't "make" a refund, you "request/demand" one (лучше: You need to ask for a partial refund).<br>
+            5. <b>re-do</b> (want them to re-do it).
+        </div>
+    </div>
+
+    <!-- ЗАДАНИЕ 6 -->
+    <div class="exercise-card" id="ex6">
+        <h2>🔵 Задание 6: Уровень Production (Говорение)</h2>
+        <p class="instruction">Ответьте на вопросы вслух. Постарайтесь использовать лексику и каузативную структуру.</p>
+        
+        <ol style="line-height: 1.8;">
+            <li>Think about a time you <b>had a service done</b> (e.g., repairs, cleaning). Was the <b>workmanship</b> good or bad? What did you do?</li>
+            <li>If a company tells you to contact a <b>third-party</b> to fix a problem they caused, how would you respond? What would you say about <b>reasonable care and skill</b>?</li>
+            <li>You paid for a 3-hour professional service, but the workers left after 1 hour. What do you demand? (Use <b>breach of contract</b> and <b>partial refund</b>).</li>
+            <li>Have you ever had to <b>get a service re-done</b> by someone else because the first professional lacked <b>reasonable care and skill</b>? Describe it.</li>
+            <li>Imagine you <b>had your house painted</b>, but they spilled paint. How do you <b>exercise your right</b> to get compensation?</li>
+            <li>A company refuses to give you a <b>partial refund</b> for a bad service. What legal steps would you take next?</li>
+            <li>Why is it important to check the <b>workmanship</b> immediately after you <b>have something done</b>?</li>
+        </ol>
+    </div>
+
+</div>
+
+<script>
+    // --- ЗАДАНИЕ 1 ---
+    function checkExercise1() {
+        const selects = document.querySelectorAll('.ex1-select');
+        selects.forEach(select => {
+            const correctAnswer = select.getAttribute('data-answer');
+            if (select.value === correctAnswer) {
+                select.classList.add('correct');
+                select.classList.remove('incorrect');
+            } else if (select.value !== "") {
+                select.classList.add('incorrect');
+                select.classList.remove('correct');
+            } else {
+                select.classList.remove('correct', 'incorrect');
+            }
+        });
+    }
+
+    // --- ЗАДАНИЕ 2 ---
+    // Выбор слова (желтый цвет)
+    const collocOptions = document.querySelectorAll('.colloc-option');
+    collocOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Находим родительский параграф, чтобы выбрать только одно слово в предложении
+            const parentP = this.parentElement;
+            const siblings = parentP.querySelectorAll('.colloc-option');
+            
+            // Убираем выделение у всех в этом параграфе
+            siblings.forEach(sib => sib.classList.remove('selected', 'correct', 'incorrect'));
+            
+            // Добавляем желтое выделение текущему
+            this.classList.add('selected');
+        });
+    });
+
+    // Проверка ответов (зеленый/красный)
+    function checkExercise2() {
+        const parentPs = document.querySelectorAll('#ex2 p');
+        parentPs.forEach(p => {
+            const options = p.querySelectorAll('.colloc-option');
+            let selectedOption = null;
+
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    selectedOption = opt;
+                }
+            });
+
+            if (selectedOption) {
+                const isCorrect = selectedOption.getAttribute('data-correct') === selectedOption.innerText;
+                selectedOption.classList.remove('selected');
+                if (isCorrect) {
+                    selectedOption.classList.add('correct');
+                } else {
+                    selectedOption.classList.add('incorrect');
+                }
+            }
+        });
+    }
+
+    // --- ЗАДАНИЕ 3 ---
+    function checkInputs(sectionId) {
+        const section = document.getElementById(sectionId);
+        const inputs = section.querySelectorAll('input[type="text"]');
+
+        inputs.forEach(input => {
+            const correctAnswer = input.getAttribute('data-answer').toLowerCase().trim();
+            const userAnswer = input.value.toLowerCase().trim();
+
+            if (userAnswer === correctAnswer) {
+                input.classList.add('correct');
+                input.classList.remove('incorrect');
+            } else {
+                input.classList.add('incorrect');
+                input.classList.remove('correct');
+            }
+        });
+    }
+
+    // --- ЗАДАНИЯ 4 и 5 ---
+    function toggleKey(keyId) {
+        const key = document.getElementById(keyId);
+        if (key.style.display === 'block') {
+            key.style.display = 'none';
+        } else {
+            key.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
